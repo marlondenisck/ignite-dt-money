@@ -1,12 +1,8 @@
-import { Transactions } from "./pages/Transactions"
+import { Transactions } from './pages/Transactions'
 export function App() {
-
-  return ( 
-    <main className="bg-gray-800 text-gray-100 min-h-screen">
-     <Transactions />
+  return (
+    <main className="min-h-screen bg-gray-800 text-gray-100">
+      <Transactions />
     </main>
-  
   )
 }
-
-
