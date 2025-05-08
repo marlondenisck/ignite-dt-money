@@ -1,3 +1,6 @@
+import { useContext } from 'react'
+import { TransactionsContext } from '../contexts/TransactionsContext'
+
 import {
   ArrowCircleDown,
   ArrowCircleUp,
@@ -5,6 +8,9 @@ import {
 } from '@phosphor-icons/react'
 
 export function Summary() {
+  const { transactions } = useContext(TransactionsContext)
+  console.log(transactions)
+
   return (
     <section className="mx-auto -mt-20 grid w-full max-w-[1120px] grid-cols-3 gap-8 px-6">
       <div className="rounded-md bg-gray-600 p-8">
