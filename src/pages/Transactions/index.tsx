@@ -1,9 +1,32 @@
+import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import { SearchForm } from '../../components/SearchForm'
 import { Summary } from '../../components/Summary'
 import { TableCell } from '../../components/TableCell'
+import { api } from '../../services/api'
+
+interface Transaction {
+  id: number
+  description: string
+  type: 'income' | 'outcome'
+  price: number
+  category: string
+  createdAt: string
+}
 
 export function Transactions() {
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  console.log(transactions)
+
+  async function fetchTransactions() {
+    const response = await api.get('/transactions')
+    setTransactions(response.data)
+  }
+
+  useEffect(() => {
+    fetchTransactions()
+  }, [])
+
   return (
     <div>
       <Header />
@@ -13,22 +36,27 @@ export function Transactions() {
         <SearchForm />
         <table className="mt-6 w-full border-separate border-spacing-x-0 border-spacing-y-4">
           <tbody>
-            <tr>
-              <TableCell isRoundedL width="50%">
-                Desenvolvimento de site
-              </TableCell>
-              <TableCell variant="income">R$ 12.000,00</TableCell>
-              <TableCell>Venda</TableCell>
-              <TableCell isRoundedR>13/04/2022</TableCell>
-            </tr>
-            <tr>
-              <TableCell isRoundedL width="50%">
-                Hambúrguer
-              </TableCell>
-              <TableCell variant="outcome">-R$ 59,00</TableCell>
-              <TableCell>Alimentação</TableCell>
-              <TableCell isRoundedR> 10/04/2022</TableCell>
-            </tr>
+            {transactions.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <TableCell isRoundedL width="50%">
+                    {transaction.description}
+                  </TableCell>
+                  <TableCell variant={transaction.type}>
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL'
+                    }).format(transaction.price)}
+                  </TableCell>
+                  <TableCell>{transaction.category}</TableCell>
+                  <TableCell isRoundedR>
+                    {new Intl.DateTimeFormat('pt-BR').format(
+                      new Date(transaction.createdAt)
+                    )}
+                  </TableCell>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </main>
