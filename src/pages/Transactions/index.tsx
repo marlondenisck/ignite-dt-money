@@ -1,4 +1,5 @@
 import { Header } from '../../components/Header'
+import { SearchForm } from '../../components/SearchForm'
 import { Summary } from '../../components/Summary'
 import { TableCell } from '../../components/TableCell'
 
@@ -9,7 +10,8 @@ export function Transactions() {
       <Summary />
 
       <main className="mx-auto mt-16 mb-0 w-full max-w-[1120px] px-6 py-0">
-        <table className="w-full border-separate border-spacing-x-0 border-spacing-y-4">
+        <SearchForm />
+        <table className="mt-6 w-full border-separate border-spacing-x-0 border-spacing-y-4">
           <tbody>
             <tr>
               <TableCell isRoundedL width="50%">
