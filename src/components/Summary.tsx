@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import { TransactionsContext } from '../contexts/TransactionsContext'
-
+import { useSummary } from '../hooks/useSummary'
 import {
   ArrowCircleDown,
   ArrowCircleUp,
@@ -10,26 +8,7 @@ import {
 import { priceFormatter } from '../utils/formatter'
 
 export function Summary() {
-  const { transactions } = useContext(TransactionsContext)
-
-  const summary = transactions.reduce(
-    (acc, transaction) => {
-      if (transaction.type === 'income') {
-        acc.income += transaction.price
-        acc.total += transaction.price
-      } else {
-        acc.outcome += transaction.price
-        acc.total -= transaction.price
-      }
-
-      return acc
-    },
-    {
-      income: 0,
-      outcome: 0,
-      total: 0
-    }
-  )
+  const summary = useSummary()
 
   return (
     <section className="mx-auto -mt-20 grid w-full max-w-[1120px] grid-cols-3 gap-8 px-6">
