@@ -14,6 +14,7 @@ interface Transaction {
 // interface para o tipo de dados deste contexto
 interface TransactionsContextType {
   transactions: Transaction[]
+  fetchTransactions: (query?: string) => Promise<void>
 }
 
 // interface para o tipo de props do provider
@@ -26,8 +27,15 @@ export const TransactionsContext = createContext({} as TransactionsContextType)
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  async function fetchTransactions() {
-    const response = await api.get('/transactions')
+  async function fetchTransactions(query?: string) {
+    const response = await api.get('/transactions', {
+      params: {
+        q: query,
+        _sort: 'createdAt',
+        _order: 'desc'
+      }
+    })
+
     setTransactions(response.data)
   }
 
@@ -36,7 +44,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }, [])
 
   return (
-    <TransactionsContext.Provider value={{ transactions }}>
+    <TransactionsContext.Provider value={{ transactions, fetchTransactions }}>
       {children}
     </TransactionsContext.Provider>
   )
