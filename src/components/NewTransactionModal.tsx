@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { TransactionsContext } from '../contexts/TransactionsContext'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
@@ -16,6 +18,8 @@ const newTransactionFormSchema = z.object({
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
+  const { createTransaction } = useContext(TransactionsContext)
+
   const baseInputClasses =
     'rounded-md border-0 placeholder:text-gray-500 bg-gray-900 p-4 text-gray-300'
   const baseButtonClasses =
@@ -27,6 +31,7 @@ export function NewTransactionModal() {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting }
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
@@ -36,9 +41,19 @@ export function NewTransactionModal() {
   })
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const { description, price, category, type } = data
+      await createTransaction({
+        description,
+        price,
+        category,
+        type
+      })
 
-    console.log(data)
+      reset()
+    } catch (error) {
+      console.error('Erro ao criar transação:', error)
+    }
   }
 
   return (
@@ -67,7 +82,10 @@ export function NewTransactionModal() {
             </button>
           </Dialog.Close>
           <form
-            onSubmit={handleSubmit(handleCreateNewTransaction)}
+            onSubmit={(e) => {
+              e.preventDefault()
+              handleSubmit(handleCreateNewTransaction)(e)
+            }}
             className="mt-8 flex flex-col gap-4"
           >
             <input
