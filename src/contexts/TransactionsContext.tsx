@@ -1,5 +1,8 @@
-import { createContext, type ReactNode, useEffect, useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { createContext, type ReactNode, useEffect } from 'react'
 import { api } from '../services/api'
+import { useAtom } from 'jotai'
+import { transactionsAtom } from '../atoms/transactionsAtom'
 
 // interface para o tipo de state do contexto
 interface Transaction {
@@ -34,7 +37,7 @@ interface TransactionsProviderProps {
 export const TransactionsContext = createContext({} as TransactionsContextType)
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactions, setTransactions] = useAtom(transactionsAtom)
 
   async function fetchTransactions(query?: string) {
     const response = await api.get('/transactions', {
