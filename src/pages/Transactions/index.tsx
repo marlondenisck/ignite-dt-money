@@ -6,6 +6,8 @@ import { SearchForm } from '../../components/SearchForm'
 import { Summary } from '../../components/Summary'
 import { TableCell } from '../../components/TableCell'
 
+import { priceFormatter, dateFormatter } from '../../utils/formatter'
+
 export function Transactions() {
   const { transactions } = useContext(TransactionsContext)
 
@@ -26,16 +28,12 @@ export function Transactions() {
                       {transaction.description}
                     </TableCell>
                     <TableCell variant={transaction.type}>
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                      }).format(transaction.price)}
+                      {transaction.type === 'outcome' && '- '}
+                      {priceFormatter.format(transaction.price)}
                     </TableCell>
                     <TableCell>{transaction.category}</TableCell>
                     <TableCell isRoundedR>
-                      {new Intl.DateTimeFormat('pt-BR').format(
-                        new Date(transaction.createdAt)
-                      )}
+                      {dateFormatter.format(new Date(transaction.createdAt))}
                     </TableCell>
                   </tr>
                 )

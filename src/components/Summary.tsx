@@ -7,7 +7,7 @@ import {
   CurrencyDollar
 } from '@phosphor-icons/react'
 
-import { formatCurrency } from '../utils/formatPrice'
+import { priceFormatter } from '../utils/formatter'
 
 export function Summary() {
   const { transactions } = useContext(TransactionsContext)
@@ -40,7 +40,7 @@ export function Summary() {
         </header>
 
         <strong className="mt-4 block text-[2rem]">
-          {formatCurrency(summary.income)}
+          {priceFormatter.format(summary.income)}
         </strong>
       </div>
 
@@ -51,7 +51,7 @@ export function Summary() {
         </header>
 
         <strong className="mt-4 block text-[2rem]">
-          {formatCurrency(summary.outcome)}
+          {priceFormatter.format(summary.outcome)}
         </strong>
       </div>
 
@@ -62,7 +62,7 @@ export function Summary() {
         </header>
 
         <strong className="mt-4 block text-[2rem]">
-          {formatCurrency(summary.total)}
+          {priceFormatter.format(summary.total)}
         </strong>
       </div>
     </section>
